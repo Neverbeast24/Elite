@@ -1,0 +1,66 @@
+MYSQL:
+NOTE: EXCEL / CSV FILE WILL BE PROVIDED
+Based on the data given:
+ 
+1.  Display total number of albums sold per artist
+
+SELECT 
+    artist,
+    COUNT(*) AS total_albums
+FROM 
+    albums
+GROUP BY 
+    artist
+ORDER BY 
+    total_albums DESC;
+
+2.  Display combined album sales per artist
+
+SELECT 
+    artist,
+    SUM(2022_sales) AS total_sales
+FROM 
+    albums
+GROUP BY 
+    artist
+ORDER BY 
+    total_sales DESC;
+
+3.  Display the top 1 artist who sold most combined album sales
+
+SELECT 
+    artist,
+    SUM(2022_sales) AS total_sales
+FROM 
+    albums
+GROUP BY 
+    artist
+ORDER BY 
+    total_sales DESC
+LIMIT 1;
+
+4.  Display the top 10 albums per year based on their number of sales
+
+SELECT * FROM (
+    SELECT 
+        album,
+        artist,
+        2022_sales,
+        YEAR(date_released) AS release_year,
+        RANK() OVER (PARTITION BY YEAR(date_released) ORDER BY 2022_sales DESC) AS rank_in_year
+    FROM 
+        albums
+) ranked
+WHERE 
+    rank_in_year <= 10;
+
+5.  Display list of albums based on the searched artist
+
+SELECT 
+    album,
+    2022_sales,
+    date_released
+FROM 
+    albums
+WHERE 
+    artist LIKE 'Mirae';
